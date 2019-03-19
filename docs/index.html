@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>clickstream.js</h1><p>Clickstream support for react and react-native applications. This javascript library sends clickstream events to
+a divolte server for processing through HDFS and Kafka. It supports a data model compatible with
+<a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters">google analytics measurement protocol</a>,
+including the following types of clicstream events:</p>
+<ul>
+<li>pageview</li>
+<li>screenview</li>
+<li>event</li>
+<li>social</li>
+<li>exception</li>
+<li>timing</li>
+</ul>
+<h2>Install</h2><pre class="prettyprint source lang-bash"><code>yarn add clickstream</code></pre><h2>View the docs</h2><p>Once installed, you can view the <a href="clickstream.html">api docs</a> to learn how to use this library.</p>
+<pre class="prettyprint source lang-bash"><code>open node_modules/clickstream/docs/index.html</code></pre><h2>Usage</h2><p>Once installed, you use the clickstream library like this:</p>
+<h3>ES6/React/React Native/Node</h3><pre class="prettyprint source lang-js"><code>import * as Clickstream from 'clickstream';
+
+const cs = Clickstream.factory(options);</code></pre><h3>ES5/React/Node</h3><pre class="prettyprint source lang-js"><code>var Clickstream = require('clickstream');
+
+var cs = Clickstream.factory(options);</code></pre><h3>Browser</h3><pre class="prettyprint source lang-html"><code>&lt;script src='/some/path/to/dist/clickstream.bundle.js'>&lt;/script>
+...
+&lt;script>
+  var cs = Clickstream.factory(options);
+&lt;/script></code></pre><p>The <code>options</code> passed into the <code>factory()</code> method are described in the <a href="clickstream.html">api docs</a>.</p>
+<p>Unless you explicitly disable it (by sending an empty <code>globalName</code> option), the created
+<code>cs</code> object will be installed globally on the <code>window</code> or <code>global</code> object
+under the key <code>clickstream</code>. This means you can access this created clickstream object
+anywhere in your code once its initialized.</p>
+<p>So in some event handler, you just need to write <code>clickstream.fireXXX(...)</code> to invoke the
+api.</p>
+<h2>API</h2><p>There are two types of api calls: <em>context setting</em> methods and <em>event firing</em> methods.</p>
+<h3>Context Setting methods</h3><p>The context setter calls are:</p>
+<ul>
+<li><code>addImpression(impressionObject)</code></li>
+<li><code>addProduct(productObject)</code></li>
+<li><code>addPromotion(promoObject)</code></li>
+<li><code>setAppInfo(appObject)</code></li>
+<li><code>setCampaignInfo(campaignObject)</code></li>
+<li><code>setContentGroups(contentGroups)</code></li>
+<li><code>setCustomDimensions(dimensions, storageKey = 'ephemeral')</code></li>
+<li><code>setCustomMetrics(metrics, storageKey = 'ephemeral')</code></li>
+<li><code>setDeviceInfo(deviceInfo, dimensions)</code></li>
+<li><code>setDocEncoding(encoding)</code></li>
+<li><code>setDocTitle(title)</code></li>
+<li><code>setExperiment(experimentObject)</code></li>
+<li><code>setGaAdwordsId(id)</code></li>
+<li><code>setGaDataSource(source)</code></li>
+<li><code>setGaDisplayAdsId(id)</code></li>
+<li><code>setGaGeoId(geoId)</code></li>
+<li><code>setGaTrackingId(trackingId)</code></li>
+<li><code>setJavaEnabled(enabled)</code></li>
+<li><code>setLinkId(id)</code></li>
+<li><code>setNoninteractive()</code></li>
+<li><code>setProductAction(actionObject)</code></li>
+<li><code>setTimeZone(tz)</code></li>
+<li><code>setUniqueDeviceId(deviceId)</code></li>
+<li><code>setUserId(userId)</code></li>
+<li><code>setUserLanguage(language)</code></li>
+<li><code>updateParams(obj, storageKey = 'persistent')</code></li>
+<li><code>updateParam(key, value, storageKey = 'persistent')</code></li>
+</ul>
+<p>Each setter has a corresponding <code>resetXXX()</code> method that will either remove the parameter
+setting, or it will reset it to some default value. See the <a href="clickstream.html">API docs</a> for
+more details.</p>
+<p>Most of these setters set <em>persistent</em> context, meaning the values are sent with all events
+fired moving forward, until a <code>resetXXX()</code> method is called.</p>
+<p>Some setters (<code>addProduct()</code>, <code>addPromotion()</code>, <code>addImpression()</code>, <code>setProductAction()</code>) set
+<em>emphemeral</em> context, meaning the values are sent only with the next event that
+is fired and then forgotten.</p>
+<p>There are two general methods <code>updateParams(obj, storageKey)</code> and <code>resetParams(obj, storageKey)</code> (with corresponding
+singular versions <code>updateParam(key, value, storageKey)</code> and <code>resetParam(key, storageKey)</code>) that update
+and remove keys directly. These allow you to set any values. The <code>storageKey</code> parameter should
+be set to <code>persistent</code> (the default), <code>ephemeral</code>, <code>product</code>, <code>impression</code>, or <code>promotion</code>
+to indicate the kind of param you're setting or removing. The <code>obj</code> for <code>updateParams()</code> should
+be an array of product, impression or promotion objects for those kinds of params, or a plain
+object of key/value pairs for persistent or emphermal parameters. Note that arguments to these
+methods are not validated in any way, and the key names of the parameters are not translated
+from user-friendly names to the cryptic abbreviated names required by our backend divolte schema.
+So you should use the specialized <code>setXXX()</code> and <code>resetXXX()</code> methods unless you have a very
+specific purpose.</p>
+<p>There is also a general <code>getParams(storageKey)</code> method that returns currently set parameters.
+The <code>storageKey</code> parameter defaults to <code>persistent</code>, but may be set to any of the admissable
+storage types.</p>
+<h3>Event firing methods</h3><p>The event firing methods include:</p>
+<ul>
+<li><code>firePageView(PageViewObject)</code></li>
+<li><code>fireScreenView(ScreenViewObject)</code></li>
+<li><code>fireEvent(EventObject)</code></li>
+<li><code>fireSocial(SocialObject)</code></li>
+<li><code>fireException(ExceptionObject)</code></li>
+<li><code>fireTiming(TimingObject)</code></li>
+</ul>
+<p>There is also a general <code>fire({})</code> method that accepts an object of key/value pairs.</p>
+<h2>Testing</h2><p>You can run the tests with</p>
+<pre class="prettyprint source lang-bash"><code>yarn test</code></pre><p>You can look at the <code>tests/all.js</code> file to get a sense of how to use the api.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Clickstream.html">Clickstream</a></li></ul><h3>Global</h3><ul><li><a href="global.html#factory">factory</a></li></ul>
+</nav>
+
+<br class="clear">
+
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

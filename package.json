@@ -1,0 +1,105 @@
+{
+  "name": "clickstream",
+  "version": "1.2.0",
+  "description": "Clickstream library",
+  "main": "dist/clickstream.bundle.js",
+  "scripts": {
+    "lint": "eslint --fix src tests",
+    "rmfooter": "sed -i.bak '/<footer>/,/<\\/footer>/ d' docs/*.html && rm -f docs/*.bak",
+    "prepublish": "npm run lint && npm run rdb && npm run bundle && npm run docs",
+    "bundle": "webpack -p",
+    "rdb": "babel-node update-referers.js > src/rdb.json",
+    "test": "babel-tape-runner \"tests/*.js\" | tap-min",
+    "testfull": "babel-tape-runner \"tests/*.js\"",
+    "docs": "jsdoc -d docs -R intro.md -c jsdoc-config.json src/clickstream.js && npm run rmfooter"
+  },
+  "keywords": [],
+  "author": "Robert Lyons <nextdude@epiphanous.io>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.eventops.io:syracuse/clickstream.git"
+  },
+  "babel": {
+    "presets": [
+      "@babel/env",
+      "module:metro-react-native-babel-preset"
+    ],
+    "sourceMaps": true,
+    "retainLines": true
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es6": true,
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "sourceType": "module"
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+      "no-console": 0,
+      "indent": [
+        "error",
+        2
+      ],
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ]
+    }
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "base-64": "^0.1.0",
+    "es6-map": "^0.1.4",
+    "eslint-loader": "^2.1.2",
+    "fingerprintjs2": "^2.0.6",
+    "id64": "^1.0.0",
+    "ipify": "^2.0.0",
+    "jstimezonedetect": "^1.0.6",
+    "lodash": "^4.17.5",
+    "moment": "^2.20.1",
+    "platform": "^1.3.5",
+    "promise-polyfill": "^8.1.0",
+    "query-string": "^6.4.0",
+    "react-native-joi": "0.0.5",
+    "referer-parser": "0.0.3",
+    "ua-parser-js": "^0.7.17",
+    "url-parse": "^1.2.0",
+    "useragent": "^2.3.0",
+    "whatwg-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/runtime": "^7.3.4",
+    "babel-tape-runner": "^3.0.0",
+    "eslint": "^5.15.3",
+    "faucet": "0.0.1",
+    "jsdoc": "^3.5.5",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "mock-browser": "^0.92.12",
+    "node-fetch": "^2.0.0",
+    "tap-min": "^1.2.2",
+    "tape": "^4.6.3",
+    "webpack": "^4.29.6",
+    "webpack-dev-server": "^3.2.1",
+    "yamljs": "^0.3.0"
+  }
+}

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <title>Simple Clickstream Test</title>
+  </head>
+  <body>
+    <h1>Simple Clickstream Test</h1>
+    <p>Open the dev console...</p>
+    <script src="dist/clickstream.bundle.js"></script>
+    <script>
+      //window.divolte = { signal: function(t,p){ console.log('divolte->',t,p); }};
+      var cs = Clickstream.factory({logging:true, divolteUrl:'localhost/divolte.js'});
+    </script>
+  </body>
+</html>
